@@ -1,48 +1,41 @@
-const apiKey = '416e0f0dd8c8e9042517b54f30bf565c';
+const apiKey = "aa416464083b84bd7ed6a75d81c8725f";
+
 let latitude;
 let longitude;
-const notification = document.getElementsByClassName('notification')[0];
+
+//"https://api.openweathermap.org/data/2.5/onecall?lat=40.9551462&lon=29.0881428&exclude={part}&appid=aa416464083b84bd7ed6a75d81c8725f""
+
 let weather;
 
-getLocation();
 function getLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(onSuccess, onError);
-    }
+  navigator.geolocation.getCurrentPosition(onSuccess, onError);
 }
 
-function kelvinToCelsius(temp) {
-    return temp - 273.15;
-}
+const onSuccess = (position) => {
+  console.log("onSuccess function", position);
+  const {
+    coords: { latitude, longitude },
+  } = position;
 
-function onSuccess(position) {
-    console.log(position);
-    latitude = position.coords.latitude;
-    longitude = position.coords.longitude;
+  const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=${apiKey}`;
+  fetch(url)
+    .then((resolve) => resolve.json())
+    .then((weatherInfo) => {
+      onWeatherIsReady(weatherInfo);
+    });
+};
 
-    const weatherCall = fetch('https://api.openweathermap.org/data/2.5/weather?'
-                            + 'lat=' + latitude
-                            + '&lon=' + longitude
-                            + '&appid=' + apiKey);
+const onError = (error) => {
+  const { message } = error;
+  const notification = document.querySelector(".notification");
+  console.error("onError fn", error, "put it on the", notification);
+  notification.innerHTML = message;
+  notification.style.display = "block";
+};
 
-    weatherCall.then(response => response.json())
-            .then(weatherInfo => {
-                console.log(weatherInfo)
-                console.log(weatherInfo.weather[0].icon);
-                console.log(kelvinToCelsius(weatherInfo.main.temp).toFixed(1));
-                console.log(weatherInfo.weather[0].main);
-                console.log(weatherInfo.name);
-            });
-}
+const onWeatherIsReady = (weather) => {
+  console.log(weather);
+};
 
-function onError(error) {
-    console.error('No no no ', error);
-    // 1. take message and put it in a p
-    const p = document.createElement('p');
-    p.innerHTML = error.message;
-    // 2. display: block (notification div)
-    notification.style.display = 'block';
-    // 3. append p inside notification
-    notification.appendChild(p);
-}
-
+getLocation();
+setTimeout(console.log(weather), 5000);
