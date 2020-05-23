@@ -34,7 +34,21 @@ const onError = (error) => {
 };
 
 const onWeatherIsReady = (weather) => {
-  console.log(weather);
+  console.log(weather.current.weather[0]);
+
+  const temperature = document.querySelector(".temperature-value p");
+  let tempMetric = weather.current.temp - 273.15;
+  tempMetric = tempMetric.toFixed(1);
+  temperature.textContent = tempMetric + temperature.textContent;
+
+  const tempIcon = document.querySelector("img");
+  tempIcon.src = `icons/${weather.current.weather[0].icon}.png`;
+
+  const tempDesription = document.querySelector(".temperature-description p");
+  tempDesription.innerHTML = weather.current.weather[0].description;
+
+  const location = document.querySelector(".location p");
+  location.innerHTML = weather.timezone;
 };
 
 getLocation();
