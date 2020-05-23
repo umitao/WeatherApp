@@ -31,8 +31,6 @@ const onError = (error) => {
 };
 
 const onWeatherIsReady = (weather) => {
-  console.log(weather);
-
   //convert temperature to metric and append before the existing text
   const temperature = document.querySelector(".temperature-value p");
   let tempMetric = weather.main.temp - 273.15;
@@ -53,4 +51,3 @@ const onWeatherIsReady = (weather) => {
 };
 
 getLocation();
-setTimeout(console.log(weather), 5000);
