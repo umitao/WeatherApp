@@ -36,17 +36,21 @@ const onError = (error) => {
 const onWeatherIsReady = (weather) => {
   console.log(weather.current.weather[0]);
 
+  //convert temperature to metric and append before the existing text
   const temperature = document.querySelector(".temperature-value p");
   let tempMetric = weather.current.temp - 273.15;
   tempMetric = tempMetric.toFixed(1);
   temperature.textContent = tempMetric + temperature.textContent;
 
+  //get temperature icon
   const tempIcon = document.querySelector("img");
   tempIcon.src = `icons/${weather.current.weather[0].icon}.png`;
 
+  //get description
   const tempDesription = document.querySelector(".temperature-description p");
   tempDesription.innerHTML = weather.current.weather[0].description;
 
+  //get location
   const location = document.querySelector(".location p");
   location.innerHTML = weather.timezone;
 };
