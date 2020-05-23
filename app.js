@@ -2,9 +2,6 @@ const apiKey = "aa416464083b84bd7ed6a75d81c8725f";
 
 let latitude;
 let longitude;
-
-//"https://api.openweathermap.org/data/2.5/onecall?lat=40.9551462&lon=29.0881428&exclude={part}&appid=aa416464083b84bd7ed6a75d81c8725f""
-
 let weather;
 
 function getLocation() {
@@ -17,7 +14,7 @@ const onSuccess = (position) => {
     coords: { latitude, longitude },
   } = position;
 
-  const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=${apiKey}`;
+  const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}`;
   fetch(url)
     .then((resolve) => resolve.json())
     .then((weatherInfo) => {
@@ -34,25 +31,25 @@ const onError = (error) => {
 };
 
 const onWeatherIsReady = (weather) => {
-  console.log(weather.current.weather[0]);
+  console.log(weather);
 
   //convert temperature to metric and append before the existing text
   const temperature = document.querySelector(".temperature-value p");
-  let tempMetric = weather.current.temp - 273.15;
+  let tempMetric = weather.main.temp - 273.15;
   tempMetric = tempMetric.toFixed(1);
   temperature.textContent = tempMetric + temperature.textContent;
 
   //get temperature icon
   const tempIcon = document.querySelector("img");
-  tempIcon.src = `icons/${weather.current.weather[0].icon}.png`;
+  tempIcon.src = `icons/${weather.weather[0].icon}.png`;
 
   //get description
   const tempDesription = document.querySelector(".temperature-description p");
-  tempDesription.innerHTML = weather.current.weather[0].description;
+  tempDesription.innerHTML = weather.weather[0].description;
 
   //get location
   const location = document.querySelector(".location p");
-  location.innerHTML = weather.timezone;
+  location.innerHTML = weather.name;
 };
 
 getLocation();
